@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>Daily Staker | 500 Days Challenge</title>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#182235;--muted:#748096;--line:#e8ecf3;--accent:#6c63ff;--accent2:#8b83ff;--green:#16a36a;--red:#e15d67;--navy:#101827}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(125deg,#111827,#252b49 70%,#554dd4);color:white;padding:28px 20px 70px}
+.top{max-width:1050px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:800;letter-spacing:.4px;font-size:18px}.brand span{color:#aaa4ff}.date{font-size:13px;color:#d6d9e8}
+.hero{max-width:1050px;margin:34px auto 0;display:flex;justify-content:space-between;align-items:end;gap:24px}.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:11px;color:#c1c4e5;font-weight:700}.hero h1{font-size:clamp(27px,5vw,42px);margin:8px 0}.hero p{margin:0;color:#d6d9e8}.day-pill{background:#ffffff1c;border:1px solid #ffffff35;border-radius:16px;padding:14px 18px;min-width:125px;text-align:center}.day-pill strong{display:block;font-size:26px}.day-pill small{color:#d6d9e8}
+main{max-width:1050px;margin:-42px auto 50px;padding:0 16px}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:0 8px 24px #202a4210}.stat-label{color:var(--muted);font-size:12px;font-weight:600}.stat-value{font-size:27px;font-weight:800;margin:8px 0 3px}.stat-note{color:var(--muted);font-size:11px}
+.progress-wrap{height:8px;background:#eceef8;border-radius:99px;overflow:hidden;margin-top:12px}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#9c95ff);border-radius:99px;transition:width .25s}
+.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(270px,.8fr);gap:16px;margin-top:17px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.section-head h2{font-size:18px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}.badge{font-size:11px;background:#f0efff;color:#5c55d6;padding:6px 10px;border-radius:30px;font-weight:700}
+.task-list{display:grid;gap:9px}.task{border:1px solid var(--line);border-radius:13px;padding:12px 13px;display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:11px;align-items:center}.task.done{background:#f5fcf8;border-color:#d5f1e2}.task input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer}.task-name{font-weight:650;font-size:13px}.task-goal{font-size:11px;color:var(--muted);margin-top:3px}.task input[type=number],.task input[type=text]{width:104px;border:1px solid var(--line);border-radius:9px;padding:8px;font:inherit;font-size:12px;text-align:right;color:var(--ink);background:#fff}.task .check-only{font-size:11px;color:var(--muted);padding-right:6px}
+.quote{margin-top:15px;background:#f4f2ff;border:1px solid #e8e4ff;padding:16px;border-radius:14px;color:#49428e;font-size:13px;line-height:1.55}.quote b{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.side-stack{display:grid;gap:15px;align-content:start}.ringbox{display:flex;align-items:center;gap:17px}.ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) 0deg,#eceef8 0deg);position:relative;flex-shrink:0}.ring:before{content:"";position:absolute;inset:8px;background:white;border-radius:50%}.ring strong{position:relative;font-size:19px}.legend{font-size:12px;color:var(--muted);line-height:1.8}.legend b{color:var(--ink)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:14px}.daybox{text-align:center}.daybox span{display:block;font-size:10px;color:var(--muted);margin-bottom:6px}.daydot{height:31px;border-radius:9px;background:#eef0f6;display:grid;place-items:center;font-size:10px;font-weight:700;color:#929bad}.daydot.full{background:#d9f5e7;color:#168657}.daydot.partial{background:#eeecff;color:#655ce0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:700;font-size:12px;cursor:pointer}.primary{background:var(--accent);color:white}.secondary{background:#f0f1f7;color:#455069}.danger{background:#fff0f0;color:#bd424b}
+.settings{margin-top:16px}.settings summary{font-weight:700;font-size:13px;cursor:pointer}.settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.setting{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:var(--muted)}.setting input{width:90px;border:1px solid var(--line);border-radius:8px;padding:7px}
+.history{margin-top:16px}.history-list{display:grid;gap:8px;margin-top:12px}.history-row{display:grid;grid-template-columns:1fr 70px 90px;align-items:center;gap:10px;font-size:12px}.history-row .bar{height:7px;background:#eef0f6;border-radius:20px;overflow:hidden}.history-row .bar i{display:block;height:100%;background:var(--accent);border-radius:20px}
+footer{text-align:center;color:#9aa3b4;font-size:11px;padding:0 16px 25px}
+@media(max-width:760px){.summary{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.hero{align-items:center}.day-pill{min-width:100px}.stat-value{font-size:23px}}
+@media(max-width:420px){header{padding:22px 16px 65px}.hero{margin-top:27px}.task{grid-template-columns:20px minmax(0,1fr) auto;padding:10px}.task input[type=number],.task input[type=text]{width:88px}.settings-grid{grid-template-columns:1fr}.summary{gap:9px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><div class="brand">DAILY <span>STAKER.</span></div><div class="date" id="todayLabel"></div></div>
+ <div class="hero">
+  <div><div class="eyebrow">Your consistency journey</div><h1>500 Days Challenge</h1><p>Small promises. Kept every day.</p></div>
+  <div class="day-pill"><strong id="challengeDay">Day 1</strong><small>of 500</small></div>
+ </div>
+</header>
+<main>
+ <section class="summary">
+  <div class="card"><div class="stat-label">TODAY'S SCORE</div><div class="stat-value" id="score">0%</div><div class="stat-note" id="scoreNote">0 of 10 habits completed</div><div class="progress-wrap"><div class="progress-bar" id="progress"></div></div></div>
+  <div class="card"><div class="stat-label">CURRENT STREAK</div><div class="stat-value" id="streak">0 🔥</div><div class="stat-note">Consecutive days with 100% habits</div></div>
+  <div class="card"><div class="stat-label">BEST STREAK</div><div class="stat-value" id="bestStreak">0</div><div class="stat-note">Your personal best</div></div>
+  <div class="card"><div class="stat-label">TOTAL CHECK-INS</div><div class="stat-value" id="checkins">0</div><div class="stat-note">Days you have tracked</div></div>
+ </section>
+ <div class="layout">
+  <section class="card">
+   <div class="section-head"><div><h2>Today's habits</h2><div class="sub">Tick it off or enter your daily result. It saves automatically.</div></div><span class="badge" id="dateBadge">TODAY</span></div>
+   <div class="task-list" id="tasks"></div>
+   <div class="quote"><b>Daily reminder</b>Progress is built by what you do consistently, not what you do occasionally.</div>
+   <div class="actions"><button class="btn primary" id="exportBtn">Export my progress (CSV)</button><button class="btn secondary" id="resetToday">Reset today's entries</button></div>
+  </section>
+  <aside class="side-stack">
+   <section class="card">
+    <div class="section-head"><div><h2>Today's overview</h2><div class="sub">Your habit completion at a glance</div></div></div>
+    <div class="ringbox"><div class="ring" id="ring"><strong id="ringText">0%</strong></div><div class="legend"><div><b id="doneCount">0</b> completed</div><div><b id="leftCount">10</b> remaining</div><div id="statusText">Let's get started!</div></div></div>
+   </section>
+   <section class="card">
+    <div class="section-head"><div><h2>Last 7 days</h2><div class="sub">Your daily consistency</div></div></div>
+    <div class="week" id="week"></div>
+   </section>
+   <section class="card history">
+    <div class="section-head"><div><h2>Recent history</h2><div class="sub">Your last 7 tracked days</div></div></div>
+    <div class="history-list" id="history"></div>
+   </section>
+   <section class="card">
+    <details class="settings">
+     <summary>⚙️ Challenge & habit settings</summary>
+     <div class="sub">Change your targets once; they will be used every day.</div>
+     <div class="settings-grid" id="settingsGrid"></div>
+     <div class="actions"><button class="btn primary" id="saveSettings">Save targets</button><button class="btn secondary" id="startToday">Set challenge start to today</button></div>
+    </details>
+   </section>
+  </aside>
+ </div>
+</main>
+<footer>Your entries stay on this device/browser using local storage. Export CSV regularly as a backup.</footer>
+<script>
+const KEY='dailyStaker500_v1';
+const defaults=[
+ {id:'wake',name:'Wake up before 6:30 AM',goal:'Before 6:30 AM',type:'time',target:'06:30'},
+ {id:'workout',name:'Workout',goal:'30–60 minutes',type:'number',target:30,unit:'min'},
+ {id:'meditation',name:'Meditation',goal:'10 minutes',type:'number',target:10,unit:'min'},
+ {id:'study',name:'Study',goal:'3–5 hours',type:'number',target:3,unit:'hours'},
+ {id:'steps',name:'10K+ steps',goal:'10,000 steps',type:'number',target:10000,unit:'steps'},
+ {id:'water',name:'Drink water',goal:'3 litres',type:'number',target:3,unit:'L'},
+ {id:'protein',name:'Complete protein goal',goal:'90 grams',type:'number',target:90,unit:'g'},
+ {id:'junk',name:'No junk food',goal:'Avoid junk food',type:'check'},
+ {id:'screen',name:'Screen time under 4 hours',goal:'Less than 4 hours',type:'number',target:4,unit:'hours',lower:true},
+ {id:'sleep',name:'Sleep',goal:'8 hours',type:'number',target:8,unit:'hours'}
+];
+let state=load();
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||{startDate:today(),days:{},targets:{}}}catch(e){return{startDate:today(),days:{},targets:{}}}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function today(){let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function dateObj(s){return new Date(s+'T12:00:00')}
+function shiftDate(s,n){let d=dateObj(s);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function dayData(date=today()){if(!state.days[date])state.days[date]={};return state.days[date]}
+function target(h){return state.targets[h.id]??h.target}
+function completed(h,v){if(h.type==='check')return v===true;if(v===undefined||v===null||v==='')return false;if(h.type==='time')return String(v)<=String(target(h));return h.lower?Number(v)<Number(target(h)):Number(v)>=Number(target(h))}
+function habits(){return defaults}
+function calc(date){let d=dayData(date),done=habits().filter(h=>completed(h,d[h.id])).length;return {done,total:habits().length,pct:Math.round(done/habits().length*100)}}
+function render(){
+ const t=today(),d=dayData(t),c=calc(t);
+ document.getElementById('todayLabel').textContent=dateObj(t).toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ let start=state.startDate||t;let diff=Math.max(0,Math.floor((dateObj(t)-dateObj(start))/86400000));document.getElementById('challengeDay').textContent='Day '+(diff+1);
+ document.getElementById('score').textContent=c.pct+'%';document.getElementById('scoreNote').textContent=`${c.done} of ${c.total} habits completed`;document.getElementById('progress').style.width=c.pct+'%';
+ document.getElementById('ring').style.background=`conic-gradient(var(--accent) ${c.pct*3.6}deg,#eceef8 0deg)`;document.getElementById('ringText').textContent=c.pct+'%';document.getElementById('doneCount').textContent=c.done;document.getElementById('leftCount').textContent=c.total-c.done;
+ document.getElementById('statusText').textContent=c.pct===100?'Perfect day! 🎉':c.pct>=70?'Great progress. Keep going!':c.pct>0?'One habit at a time.':'Let’s get started!';
+ const list=document.getElementById('tasks');list.innerHTML='';
+ habits().forEach(h=>{let v=d[h.id],ok=completed(h,v),row=document.createElement('div');row.className='task'+(ok?' done':'');
+ let control='';
+ if(h.type==='check')control=`<input aria-label="Mark ${h.name} complete" type="checkbox" ${v===true?'checked':''} data-id="${h.id}">`;
+ else if(h.type==='time')control=`<input aria-label="${h.name}" type="time" value="${v??''}" data-id="${h.id}">`;
+ else control=`<input aria-label="${h.name}" type="number" min="0" step="${h.unit==='L'||h.unit==='hours'||h.unit==='g'?'0.1':'1'}" placeholder="Enter" value="${v??''}" data-id="${h.id}"><span class="check-only">${h.unit}</span>`;
+ row.innerHTML=`<div class="tick">${ok?'✓':'○'}</div><div><div class="task-name">${h.name}</div><div class="task-goal">Target: ${h.type==='time'?target(h):h.type==='check'?'No junk':target(h)+' '+h.unit} ${h.type==='time'?'AM':''}</div></div><div style="display:flex;align-items:center;gap:5px">${control}</div>`;
+ list.appendChild(row);
+ });
+ list.querySelectorAll('input').forEach(el=>el.addEventListener('change',()=>{let h=habits().find(x=>x.id===el.dataset.id);d[h.id]=h.type==='check'?el.checked:el.value;save();render()}));
+ renderStats();
+}
+function renderStats(){
+ let dates=Object.keys(state.days).sort();let checkins=dates.filter(x=>calc(x).done>0).length;
+ document.getElementById('checkins').textContent=checkins;
+ let streak=0,best=0,run=0;let cursor=today();
+ // Current streak counts consecutive perfect days, allowing today to be unfinished.
+ let startCursor=calc(cursor).pct===100?cursor:shiftDate(cursor,-1);
+ while(state.days[startCursor]&&calc(startCursor).pct===100){streak++;startCursor=shiftDate(startCursor,-1);if(streak>5000)break}
+ for(let i=0;i<dates.length;i++){if(calc(dates[i]).pct===100){run++;best=Math.max(best,run)}else run=0}
+ document.getElementById('streak').textContent=streak+' 🔥';document.getElementById('bestStreak').textContent=best;
+ const week=document.getElementById('week');week.innerHTML='';
+ for(let i=6;i>=0;i--){let dt=shiftDate(today(),-i),c=calc(dt),box=document.createElement('div');box.className='daybox';box.innerHTML=`<span>${dateObj(dt).toLocaleDateString(undefined,{weekday:'short'})}</span><div class="daydot ${c.pct===100?'full':c.pct>0?'partial':''}" title="${dt}: ${c.pct}%">${c.pct}%</div>`;week.appendChild(box)}
+ const hist=document.getElementById('history');hist.innerHTML='';
+ dates.slice(-7).reverse().forEach(dt=>{let c=calc(dt),row=document.createElement('div');row.className='history-row';row.innerHTML=`<span>${dateObj(dt).toLocaleDateString(undefined,{day:'numeric',month:'short'})}</span><div class="bar"><i style="width:${c.pct}%"></i></div><b style="text-align:right">${c.done}/${c.total} · ${c.pct}%</b>`;hist.appendChild(row)});
+ if(!hist.children.length)hist.innerHTML='<span class="sub">Your history will appear here after your first check-in.</span>';
+}
+function settings(){
+ let grid=document.getElementById('settingsGrid');grid.innerHTML='';
+ defaults.forEach(h=>{if(h.type==='check')return;let val=target(h);let label=h.type==='time'?'Target time':`Target (${h.unit})`;let div=document.createElement('label');div.className='setting';div.innerHTML=`<span>${h.name}<br><small>${label}</small></span><input type="${h.type==='time'?'time':'number'}" step="0.1" data-target="${h.id}" value="${val}">`;grid.appendChild(div)});
+}
+document.getElementById('saveSettings').onclick=()=>{document.querySelectorAll('[data-target]').forEach(el=>{state.targets[el.dataset.target]=el.type==='number'?Number(el.value):el.value});save();render();settings();alert('Targets saved. They will apply to each new day.')};
+document.getElementById('startToday').onclick=()=>{if(confirm('Start your 500-day challenge from today?')){state.startDate=today();save();render();}};
+document.getElementById('resetToday').onclick=()=>{if(confirm("Clear today's entries? Your previous days will stay saved.")){delete state.days[today()];save();render();}};
+document.getElementById('exportBtn').onclick=()=>{let rows=[['Date','Challenge Day',...defaults.map(h=>h.name),'Completed','Total','Score']];Object.keys(state.days).sort().forEach(dt=>{let d=state.days[dt],c=calc(dt),dayNo=Math.floor((dateObj(dt)-dateObj(state.startDate))/86400000)+1;rows.push([dt,dayNo,...defaults.map(h=>d[h.id]??''),c.done,c.total,c.pct+'%'])});let csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');let blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='daily-staker-progress.csv';a.click();URL.revokeObjectURL(url)};
+settings();render();
+</script>
+</body>
+</html>
