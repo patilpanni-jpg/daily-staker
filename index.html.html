@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<title>Daily Staker | 500 Days Challenge</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#f4f6fb;--card:#fff;--ink:#182235;--muted:#748096;--line:#e8ecf3;--accent:#6c63ff;--green:#16a36a;--red:#c94d58}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(125deg,#111827,#252b49 70%,#554dd4);color:white;padding:25px 20px 68px}
+.top,.hero,main{max-width:1080px;margin-left:auto;margin-right:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:850;letter-spacing:.5px;font-size:18px}.brand span{color:#aaa4ff}.date{font-size:13px;color:#d6d9e8}
+.hero{margin-top:32px;display:flex;justify-content:space-between;align-items:end;gap:24px}.eyebrow{text-transform:uppercase;letter-spacing:2px;font-size:11px;color:#c1c4e5;font-weight:700}.hero h1{font-size:clamp(27px,5vw,42px);margin:8px 0}.hero p{margin:0;color:#d6d9e8}.day-pill{background:#ffffff1c;border:1px solid #ffffff35;border-radius:16px;padding:14px 18px;min-width:125px;text-align:center}.day-pill strong{display:block;font-size:26px}.day-pill small{color:#d6d9e8}
+main{margin-top:-42px;margin-bottom:45px;padding:0 16px}.card{background:var(--card);border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:0 8px 24px #202a4210}.auth-card{margin-bottom:15px}.auth-grid{display:grid;grid-template-columns:1fr 1fr auto;gap:9px;align-items:end}.field label{display:block;font-size:11px;color:var(--muted);font-weight:700;margin:0 0 5px}.field input{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit;font-size:13px}.auth-actions{display:flex;gap:7px;flex-wrap:wrap}.btn{border:0;border-radius:10px;padding:10px 13px;font-weight:750;font-size:12px;cursor:pointer}.primary{background:var(--accent);color:white}.secondary{background:#f0f1f7;color:#455069}.danger{background:#fff0f0;color:#bd424b}.btn:disabled{opacity:.5;cursor:not-allowed}.status{font-size:12px;margin-top:10px;color:var(--muted);line-height:1.5}.status.error{color:var(--red)}.status.ok{color:var(--green)}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.stat-label{color:var(--muted);font-size:12px;font-weight:650}.stat-value{font-size:27px;font-weight:850;margin:8px 0 3px}.stat-note{color:var(--muted);font-size:11px}.progress-wrap{height:8px;background:#eceef8;border-radius:99px;overflow:hidden;margin-top:12px}.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--accent),#9c95ff);border-radius:99px;transition:width .25s}
+.layout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(270px,.8fr);gap:16px;margin-top:17px}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:15px}.section-head h2{font-size:18px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}.badge{font-size:11px;background:#f0efff;color:#5c55d6;padding:6px 10px;border-radius:30px;font-weight:750;white-space:nowrap}
+.task-list{display:grid;gap:9px}.task{border:1px solid var(--line);border-radius:13px;padding:12px 13px;display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:11px;align-items:center}.task.done{background:#f5fcf8;border-color:#d5f1e2}.task input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer}.task-name{font-weight:700;font-size:13px}.task-goal{font-size:11px;color:var(--muted);margin-top:3px}.task input[type=number],.task input[type=time]{width:112px;border:1px solid var(--line);border-radius:9px;padding:8px;font:inherit;font-size:12px;text-align:right;color:var(--ink);background:#fff}.task input:disabled{background:#f5f6fa;color:#687386}.quote{margin-top:15px;background:#f4f2ff;border:1px solid #e8e4ff;padding:16px;border-radius:14px;color:#49428e;font-size:13px;line-height:1.55}.quote b{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px}
+.side-stack{display:grid;gap:15px;align-content:start}.ringbox{display:flex;align-items:center;gap:17px}.ring{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) 0deg,#eceef8 0deg);position:relative;flex-shrink:0}.ring:before{content:"";position:absolute;inset:8px;background:white;border-radius:50%}.ring strong{position:relative;font-size:19px}.legend{font-size:12px;color:var(--muted);line-height:1.8}.legend b{color:var(--ink)}.week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:14px}.daybox{text-align:center}.daybox span{display:block;font-size:10px;color:var(--muted);margin-bottom:6px}.daydot{height:31px;border-radius:9px;background:#eef0f6;display:grid;place-items:center;font-size:10px;font-weight:750;color:#929bad}.daydot.full{background:#d9f5e7;color:#168657}.daydot.partial{background:#eeecff;color:#655ce0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.history{margin-top:16px}.history-list{display:grid;gap:8px;margin-top:12px}.history-row{display:grid;grid-template-columns:1fr 70px 90px;align-items:center;gap:10px;font-size:12px}.history-row .bar{height:7px;background:#eef0f6;border-radius:20px;overflow:hidden}.history-row .bar i{display:block;height:100%;background:var(--accent);border-radius:20px}.settings{margin-top:16px}.settings summary{font-weight:750;font-size:13px;cursor:pointer}.settings-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.setting{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:12px;color:var(--muted)}.setting input{width:100px;border:1px solid var(--line);border-radius:8px;padding:7px}.readonly-note{background:#f6f7fb;border-radius:10px;padding:10px;font-size:12px;color:var(--muted);margin-bottom:12px}footer{text-align:center;color:#9aa3b4;font-size:11px;padding:0 16px 25px}
+@media(max-width:760px){.summary{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}.hero{align-items:center}.day-pill{min-width:100px}.stat-value{font-size:23px}.auth-grid{grid-template-columns:1fr}.auth-actions{grid-column:auto}}
+@media(max-width:420px){header{padding:22px 16px 65px}.hero{margin-top:27px}.task{grid-template-columns:20px minmax(0,1fr) auto;padding:10px}.task input[type=number],.task input[type=time]{width:92px}.settings-grid{grid-template-columns:1fr}.summary{gap:9px}.card{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top"><div class="brand">DAILY <span>STAKER.</span></div><div class="date" id="todayLabel"></div></div>
+ <div class="hero"><div><div class="eyebrow">Your consistency journey</div><h1>500 Days Challenge</h1><p>Small promises. Kept every day.</p></div><div class="day-pill"><strong id="challengeDay">Day 1</strong><small>of 500</small></div></div>
+</header>
+<main>
+ <section class="card auth-card">
+  <div class="section-head"><div><h2 id="authTitle">Daily Staker access</h2><div class="sub" id="authSub">Sign in to update your tracker. Everyone else can view your progress.</div></div><span class="badge" id="accessBadge">PUBLIC VIEW</span></div>
+  <div id="authForm" class="auth-grid">
+   <div class="field"><label for="email">EMAIL</label><input id="email" type="email" autocomplete="username" placeholder="Your email address"></div>
+   <div class="field"><label for="password">PASSWORD</label><input id="password" type="password" autocomplete="current-password" placeholder="Password (min. 8 characters)"></div>
+   <div class="auth-actions"><button class="btn primary" id="signIn">Sign in</button><button class="btn secondary" id="signUp">Create account</button></div>
+  </div>
+  <div class="auth-actions" id="signedInActions" hidden><button class="btn secondary" id="signOut">Sign out</button></div>
+  <div class="status" id="authStatus">Connecting to the shared progress database…</div>
+ </section>
+ <section class="summary">
+  <div class="card"><div class="stat-label">TODAY'S SCORE</div><div class="stat-value" id="score">0%</div><div class="stat-note" id="scoreNote">0 of 10 habits completed</div><div class="progress-wrap"><div class="progress-bar" id="progress"></div></div></div>
+  <div class="card"><div class="stat-label">CURRENT STREAK</div><div class="stat-value" id="streak">0 🔥</div><div class="stat-note">Consecutive days with 100% habits</div></div>
+  <div class="card"><div class="stat-label">BEST STREAK</div><div class="stat-value" id="bestStreak">0</div><div class="stat-note">Your personal best</div></div>
+  <div class="card"><div class="stat-label">TOTAL CHECK-INS</div><div class="stat-value" id="checkins">0</div><div class="stat-note">Days you have tracked</div></div>
+ </section>
+ <div class="layout">
+  <section class="card">
+   <div class="section-head"><div><h2 id="habitHeading">Today's habits</h2><div class="sub" id="habitSub">Tick it off or enter your daily result. Changes save online.</div></div><span class="badge" id="dateBadge">TODAY</span></div>
+   <div class="readonly-note" id="readonlyNote" hidden>You're viewing Pradnya's public tracker. Daily entries are read-only.</div>
+   <div class="task-list" id="tasks"></div>
+   <div class="quote"><b>Daily reminder</b>Progress is built by what you do consistently, not what you do occasionally.</div>
+   <div class="actions"><button class="btn primary" id="exportBtn">Export progress (CSV)</button><button class="btn secondary" id="resetToday" hidden>Reset today's entries</button></div>
+  </section>
+  <aside class="side-stack">
+   <section class="card"><div class="section-head"><div><h2>Today's overview</h2><div class="sub">Your habit completion at a glance</div></div></div><div class="ringbox"><div class="ring" id="ring"><strong id="ringText">0%</strong></div><div class="legend"><div><b id="doneCount">0</b> completed</div><div><b id="leftCount">10</b> remaining</div><div id="statusText">Let's get started!</div></div></div></section>
+   <section class="card"><div class="section-head"><div><h2>Last 7 days</h2><div class="sub">Your daily consistency</div></div></div><div class="week" id="week"></div></section>
+   <section class="card history"><div class="section-head"><div><h2>Recent history</h2><div class="sub">Your last 7 tracked days</div></div></div><div class="history-list" id="history"></div></section>
+   <section class="card"><details class="settings" id="settingsDetails"><summary>⚙️ Challenge settings</summary><div class="sub">Challenge start date is shared with viewers.</div><div class="settings-grid" id="settingsGrid"></div><div class="field" style="margin-top:12px"><label for="startDateInput">CHALLENGE START DATE</label><input id="startDateInput" type="date"></div><div class="actions"><button class="btn primary" id="saveSettings">Save settings</button><button class="btn secondary" id="setStartToday">Set start to today</button></div></details></section>
+  </aside>
+ </div>
+</main>
+<footer>Daily Staker · 500-day public progress tracker · Only the tracker owner can edit entries.</footer>
+<script>
+const SUPABASE_URL = 'https://ipjrsbgmudynysxypxgc.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_WhBSn0R40eOIf5qdjYLsOw_LCftF7fJ';
+const OWNER_UID = 'ADD_OWNER_USER_ID_HERE'; // Set after creating your account; do not remove.
+const LEGACY_KEY = 'dailyStaker500_v1';
+const defaults = [
+ {id:'wake',name:'Wake up before 6:30 AM',type:'time',target:'06:30',unit:'AM'},
+ {id:'workout',name:'Workout',type:'number',target:30,unit:'min'},
+ {id:'meditation',name:'Meditation',type:'number',target:10,unit:'min'},
+ {id:'study',name:'Study',type:'number',target:3,unit:'hours'},
+ {id:'steps',name:'10K+ steps',type:'number',target:10000,unit:'steps'},
+ {id:'water',name:'Drink water',type:'number',target:3,unit:'L'},
+ {id:'protein',name:'Complete protein goal',type:'number',target:90,unit:'g'},
+ {id:'junk',name:'No junk food',type:'check',target:true,unit:''},
+ {id:'screen',name:'Screen time under 4 hours',type:'number',target:4,unit:'hours',lower:true},
+ {id:'sleep',name:'Sleep',type:'number',target:8,unit:'hours'}
+];
+let db=null, session=null, records={}, selectedDate=localToday(), challengeStart=localToday(), targets={}, busy=false;
+const $=id=>document.getElementById(id);
+function localToday(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function dateObj(s){return new Date(s+'T12:00:00')}
+function shiftDate(s,n){let d=dateObj(s);d.setDate(d.getDate()+n);return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
+function setStatus(msg,kind=''){ $('authStatus').textContent=msg; $('authStatus').className='status '+kind; }
+function target(h){return targets[h.id] ?? h.target}
+function complete(h,v){if(h.type==='check')return v===true;if(v===undefined||v===null||v==='')return false;return h.lower?Number(v)<Number(target(h)):h.type==='time'?String(v)<=String(target(h)):Number(v)>=Number(target(h))}
+function dataFor(date){return records[date]?.habits || {}}
+function calc(date){const d=dataFor(date);const done=defaults.filter(h=>complete(h,d[h.id])).length;return {done,total:defaults.length,pct:Math.round(done/defaults.length*100)}}
+function dayNumber(){return Math.max(1,Math.floor((dateObj(selectedDate)-dateObj(challengeStart))/86400000)+1)}
+function isOwner(){return !!session && OWNER_UID !== 'ADD_OWNER_USER_ID_HERE' && session.user.id===OWNER_UID}
+function render(){
+ const t=localToday(), c=calc(t), d=dataFor(selectedDate), owner=isOwner();
+ $('todayLabel').textContent=dateObj(t).toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ $('challengeDay').textContent='Day '+Math.min(500,dayNumber());
+ $('score').textContent=c.pct+'%';$('scoreNote').textContent=`${c.done} of ${c.total} habits completed`;$('progress').style.width=c.pct+'%';
+ $('ring').style.background=`conic-gradient(var(--accent) ${c.pct*3.6}deg,#eceef8 0deg)`;$('ringText').textContent=c.pct+'%';$('doneCount').textContent=c.done;$('leftCount').textContent=c.total-c.done;
+ $('statusText').textContent=c.pct===100?'Perfect day! 🎉':c.pct>=70?'Great progress. Keep going!':c.pct>0?'One habit at a time.':'Let’s get started!';
+ $('dateBadge').textContent=selectedDate===t?'TODAY':dateObj(selectedDate).toLocaleDateString(undefined,{day:'numeric',month:'short'});
+ $('habitHeading').textContent=selectedDate===t?"Today's habits":'Habits · '+dateObj(selectedDate).toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});
+ $('readonlyNote').hidden=owner;$('resetToday').hidden=!owner || selectedDate!==t;$('settingsDetails').style.display=owner?'block':'none';
+ $('tasks').innerHTML='';
+ defaults.forEach(h=>{let v=d[h.id],ok=complete(h,v),row=document.createElement('div');row.className='task'+(ok?' done':'');
+ let control=h.type==='check'?`<input type="checkbox" data-id="${h.id}" ${v===true?'checked':''} ${owner?'':'disabled'}>`:
+ `<input type="${h.type==='time'?'time':'number'}" ${h.type==='number'?'min="0" step="'+(h.unit==='L'||h.unit==='hours'?'0.1':'1')+'"':''} value="${v??''}" placeholder="Enter" data-id="${h.id}" ${owner?'':'disabled'}>`;
+ row.innerHTML=`<div class="tick">${ok?'✓':'○'}</div><div><div class="task-name">${h.name}</div><div class="task-goal">Target: ${h.type==='check'?'Avoid junk food':target(h)+(h.type==='time'?' AM':' '+h.unit)}</div></div><div style="display:flex;align-items:center;gap:5px">${control}</div>`;
+ $('tasks').appendChild(row);
+ });
+ $('tasks').querySelectorAll('input').forEach(el=>el.addEventListener('change',async()=>{if(!isOwner())return;let h=defaults.find(x=>x.id===el.dataset.id),val=h.type==='check'?el.checked:el.value;await saveDayValue(h.id,val)}));
+ renderStats();$('exportBtn').disabled=!Object.keys(records).length;
+}
+function renderStats(){
+ const dates=Object.keys(records).sort(),checkins=dates.filter(x=>calc(x).done>0).length;$('checkins').textContent=checkins;
+ let streak=0,best=0,run=0,cursor=localToday(),start=calc(cursor).pct===100?cursor:shiftDate(cursor,-1);
+ while(records[start]&&calc(start).pct===100){streak++;start=shiftDate(start,-1);if(streak>500)break}
+ for(const dt of dates){if(calc(dt).pct===100){run++;best=Math.max(best,run)}else run=0}
+ $('streak').textContent=streak+' 🔥';$('bestStreak').textContent=best;
+ $('week').innerHTML='';for(let i=6;i>=0;i--){let dt=shiftDate(localToday(),-i),cc=calc(dt),box=document.createElement('div');box.className='daybox';box.innerHTML=`<span>${dateObj(dt).toLocaleDateString(undefined,{weekday:'short'})}</span><button class="daydot ${cc.pct===100?'full':cc.pct>0?'partial':''}" data-date="${dt}" title="${dt}: ${cc.pct}%">${cc.pct}%</button>`;$('week').appendChild(box)}
+ $('week').querySelectorAll('button').forEach(b=>b.onclick=()=>{selectedDate=b.dataset.date;render()});
+ $('history').innerHTML='';dates.slice(-7).reverse().forEach(dt=>{let cc=calc(dt),row=document.createElement('div');row.className='history-row';row.innerHTML=`<span>${dateObj(dt).toLocaleDateString(undefined,{day:'numeric',month:'short'})}</span><div class="bar"><i style="width:${cc.pct}%"></i></div><b style="text-align:right">${cc.done}/${cc.total} · ${cc.pct}%</b>`;row.style.cursor='pointer';row.title='View this day';row.onclick=()=>{selectedDate=dt;render()};$('history').appendChild(row)});
+ if(!$('history').children.length)$('history').innerHTML='<span class="sub">No shared check-ins yet. The first saved day will appear here.</span>';
+}
+function renderAuth(){
+ const owner=isOwner();$('authForm').hidden=!!session;$('signedInActions').hidden=!session;
+ $('authTitle').textContent=owner?'You are managing Daily Staker':session?'Signed in · view-only':'Daily Staker access';
+ $('authSub').textContent=owner?'Your changes sync online and are visible to everyone with the link.':session?'This account does not have editing permission.':'Sign in to update your tracker. Everyone else can view your progress.';
+ $('accessBadge').textContent=owner?'OWNER · EDITING':session?'VIEW ONLY':'PUBLIC VIEW';
+ $('readonlyNote').hidden=owner;
+}
+async function loadCloud(){
+ if(!db){setStatus('Could not load Supabase client. Check your internet connection and reload.','error');return}
+ setStatus('Loading shared progress…');
+ const {data,error}=await db.from('daily_entries').select('entry_date,owner_id,habits,created_at,updated_at').order('entry_date',{ascending:true});
+ if(error){setStatus('Could not load progress: '+error.message,'error');return}
+ records={};let starts=[];
+ for(const row of (data||[])){records[row.entry_date]=row;if(row.habits?._challengeStartDate)starts.push(row.habits._challengeStartDate);if(row.habits?._targets)targets=row.habits._targets}
+ if(starts.length)challengeStart=starts.sort()[0];
+ else {
+   try{const legacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'null');if(legacy?.startDate)challengeStart=legacy.startDate}catch(e){}
+ }
+ render();setStatus(ownerStatus(),'ok');
+}
+function ownerStatus(){return isOwner()?'You are signed in as the tracker owner. Changes sync to the cloud.':'Public live view. Sign in is required to edit.'}
+async function saveDay(){
+ if(!isOwner()){setStatus('Only the tracker owner can edit this progress.','error');return}
+ const existing=records[selectedDate]?.habits||{},payload={...existing,_challengeStartDate:challengeStart,_targets:targets};
+ const row={entry_date:selectedDate,owner_id:session.user.id,habits:payload,updated_at:new Date().toISOString()};
+ const {data,error}=await db.from('daily_entries').upsert(row,{onConflict:'entry_date'}).select().single();
+ if(error){setStatus('Save failed: '+error.message,'error');return false}
+ records[selectedDate]=data;render();setStatus('Saved online. Everyone viewing the link can see this update.','ok');return true;
+}
+async function saveDayValue(id,val){
+ const old={...(dataFor(selectedDate))};old[id]=val;
+ records[selectedDate]={...(records[selectedDate]||{}),entry_date:selectedDate,owner_id:session.user.id,habits:old};
+ render();
+ const ok=await saveDay();if(!ok){old[id]=dataFor(selectedDate)[id];}
+}
+async function migrateLegacy(){
+ if(!isOwner())return;
+ try{
+  const legacy=JSON.parse(localStorage.getItem(LEGACY_KEY)||'null');if(!legacy?.days)return;
+  const rows=Object.entries(legacy.days).map(([date,habits])=>({entry_date:date,owner_id:session.user.id,habits:{...habits,_challengeStartDate:legacy.startDate||challengeStart}}));
+  if(rows.length){const {error}=await db.from('daily_entries').upsert(rows,{onConflict:'entry_date'});if(error){setStatus('Signed in, but old browser entries could not be imported: '+error.message,'error');return}setStatus('Imported your previous browser entries into the shared tracker.','ok')}
+ }catch(e){console.error(e)}
+}
+async function authAction(kind){
+ const email=$('email').value.trim(),password=$('password').value;
+ if(!email||!password){setStatus('Enter your email and password first.','error');return}
+ if(password.length<8){setStatus('Use a password with at least 8 characters.','error');return}
+ setStatus(kind==='signup'?'Creating your account…':'Signing in…');
+ const result=kind==='signup'?await db.auth.signUp({email,password}):await db.auth.signInWithPassword({email,password});
+ if(result.error){setStatus(result.error.message,'error');return}
+ session=result.data.session;
+ if(kind==='signup'&&!session){setStatus('Account created. Check your email and confirm your address, then return here and sign in.','ok');return}
+ renderAuth();await loadCloud();await migrateLegacy();renderAuth();render();
+}
+$('signIn').onclick=()=>authAction('signin');$('signUp').onclick=()=>authAction('signup');
+$('signOut').onclick=async()=>{await db.auth.signOut();session=null;renderAuth();await loadCloud();setStatus('Signed out. You are viewing the public tracker.','ok')};
+$('resetToday').onclick=async()=>{if(!isOwner()||selectedDate!==localToday())return;if(!confirm("Clear today's entries? This will update the public tracker."))return;records[selectedDate]={...(records[selectedDate]||{}),habits:{_challengeStartDate:challengeStart,_targets:targets}};await saveDay()};
+$('saveSettings').onclick=async()=>{if(!isOwner())return;document.querySelectorAll('[data-target]').forEach(el=>{targets[el.dataset.target]=el.type==='number'?Number(el.value):el.value});challengeStart=$('startDateInput').value||challengeStart;await saveDay()};
+$('setStartToday').onclick=async()=>{if(!isOwner())return;challengeStart=localToday();$('startDateInput').value=challengeStart;await saveDay()};
+$('exportBtn').onclick=()=>{let rows=[['Date','Challenge Day',...defaults.map(h=>h.name),'Completed','Total','Score']];Object.keys(records).sort().forEach(dt=>{let cc=calc(dt),dayNo=Math.floor((dateObj(dt)-dateObj(challengeStart))/86400000)+1;rows.push([dt,dayNo,...defaults.map(h=>records[dt].habits?.[h.id]??''),cc.done,cc.total,cc.pct+'%'])});let csv=rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');let blob=new Blob([csv],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='daily-staker-progress.csv';a.click();URL.revokeObjectURL(url)};
+function settingsUI(){$('settingsGrid').innerHTML='';defaults.forEach(h=>{if(h.type==='check')return;let div=document.createElement('label');div.className='setting';div.innerHTML=`<span>${h.name}<br><small>Target (${h.unit})</small></span><input type="${h.type==='time'?'time':'number'}" data-target="${h.id}" value="${target(h)}">`;$('settingsGrid').appendChild(div)});$('startDateInput').value=challengeStart}
+async function init(){
+ settingsUI();
+ if(!window.supabase?.createClient){setStatus('Supabase library did not load. Refresh the page and check your internet connection.','error');return}
+ db=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+ const {data}=await db.auth.getSession();session=data.session;
+ renderAuth();await loadCloud();
+ if(isOwner()){await migrateLegacy();renderAuth();render()}
+ db.auth.onAuthStateChange(async(_event,newSession)=>{session=newSession;renderAuth();await loadCloud();renderAuth();render()});
+}
+init();
+</script>
+</body>
+</html>
